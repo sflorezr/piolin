@@ -47,7 +47,13 @@ Ver `prisma/schema.prisma` para el detalle completo.
    npm run db:migrate
    ```
 
-4. Levantar el servidor de desarrollo:
+4. Crear el usuario administrador inicial (usa `ADMIN_EMAIL`/`ADMIN_PASSWORD` si quieres personalizarlo, si no usa `admin@piolin.local` / `admin123`):
+
+   ```bash
+   npm run db:seed
+   ```
+
+5. Levantar el servidor de desarrollo:
 
    ```bash
    npm run dev
@@ -61,6 +67,7 @@ Ver `prisma/schema.prisma` para el detalle completo.
 - `npm run build` / `npm run start` — build y servidor de producción
 - `npm run lint` — ESLint
 - `npm run db:migrate` — crear/aplicar migraciones de Prisma
+- `npm run db:seed` — crear el usuario administrador inicial
 - `npm run db:studio` — abrir Prisma Studio para inspeccionar los datos
 
 ## Estado actual

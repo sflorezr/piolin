@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Rol {
+  ADMIN
+  PROFESORA
+}
+
+enum Estado {
+  ACTIVO
+  INACTIVO
+}
+
+enum TipoPregunta {
+  OPCION_MULTIPLE
+  ABIERTA
+}
+
+model Usuario {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  rol       Rol
+  estado    Estado    @default(ACTIVO)
+  profesora Profesora?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Profesora {
+  id        String   @id @default(cuid())
+  nombre    String
+  documento String   @unique
+  telefono  String
+  fotoUrl   String?
+  estado    Estado   @default(ACTIVO)
+
+  usuarioId String? @unique
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+
+  gruposComoPrincipal Grupo[]          @relation("ProfesoraPrincipal")
+  gruposComoAuxiliar  Grupo[]          @relation("ProfesoraAuxiliar")
+  reportesEntrega     ReporteEntrega[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Grupo {
+  id          String @id @default(cuid())
+  descripcion String
+  estado      Estado @default(ACTIVO)
+
+  profesoraPrincipalId String
+  profesoraPrincipal   Profesora @relation("ProfesoraPrincipal", fields: [profesoraPrincipalId], references: [id])
+
+  profesoraAuxiliarId String?
+  profesoraAuxiliar   Profesora? @relation("ProfesoraAuxiliar", fields: [profesoraAuxiliarId], references: [id])
+
+  ninos Nino[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Nino {
+  id              String   @id @default(cuid())
+  nombre          String
+  fechaNacimiento DateTime
+
+  nombrePapa  String?
+  celularPapa String?
+  correoPapa  String?
+
+  nombreMama  String?
+  celularMama String?
+  correoMama  String?
+
+  fotoUrl     String?
+  horaEntrega String? // formato "HH:mm"
+  estado      Estado  @default(ACTIVO)
+
+  grupoId String
+  grupo   Grupo  @relation(fields: [grupoId], references: [id])
+
+  reportesEntrega ReporteEntrega[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pregunta {
+  id      String       @id @default(cuid())
+  texto   String
+  tipo    TipoPregunta
+  opciones String[]    @default([]) // solo aplica cuando tipo = OPCION_MULTIPLE
+  orden   Int          @default(0)
+  estado  Estado       @default(ACTIVO)
+
+  respuestas RespuestaReporte[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReporteEntrega {
+  id String @id @default(cuid())
+
+  ninoId String
+  nino   Nino   @relation(fields: [ninoId], references: [id])
+
+  profesoraId String
+  profesora   Profesora @relation(fields: [profesoraId], references: [id])
+
+  fechaHora    DateTime @default(now())
+  enviadoEmail Boolean  @default(false)
+  enviadoA     String?
+
+  respuestas RespuestaReporte[]
+
+  createdAt DateTime @default(now())
+}
+
+model RespuestaReporte {
+  id String @id @default(cuid())
+
+  reporteId String
+  reporte   ReporteEntrega @relation(fields: [reporteId], references: [id])
+
+  preguntaId String
+  pregunta   Pregunta @relation(fields: [preguntaId], references: [id])
+
+  respuesta String
+}

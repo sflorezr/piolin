@@ -1,8 +1,13 @@
+import path from "path";
 import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { formatearFecha } from "@/lib/utils";
 
+const LOGO_PIOLIN = path.join(process.cwd(), "public", "logo-piolin.png");
+
 const styles = StyleSheet.create({
   page: { padding: 32, fontSize: 11, fontFamily: "Helvetica" },
+  encabezadoMarca: { flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 16 },
+  logo: { width: 90, height: 54 },
   header: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
   foto: { width: 56, height: 56, borderRadius: 28, marginRight: 12 },
   titulo: { fontSize: 16, fontWeight: 700 },
@@ -54,6 +59,11 @@ export function ReporteSemanalPdf({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <View style={styles.encabezadoMarca}>
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image, not an <img> */}
+          <Image src={LOGO_PIOLIN} style={styles.logo} />
+        </View>
+
         <View style={styles.header}>
           {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image, not an <img> */}
           {fotoUrl && <Image src={fotoUrl} style={styles.foto} />}

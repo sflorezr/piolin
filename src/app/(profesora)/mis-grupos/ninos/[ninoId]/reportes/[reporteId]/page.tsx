@@ -52,6 +52,17 @@ export default async function ReporteSemanalPage({
         {formatearFecha(reporte.fechaInicio)} — {formatearFecha(reporte.fechaFin)}
       </p>
 
+      <a
+        href={`/mis-grupos/ninos/${ninoId}/reportes/${reporteId}/pdf`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 inline-block"
+      >
+        <Button variant="outline" size="sm">
+          Ver / descargar PDF
+        </Button>
+      </a>
+
       <div className="mt-6 flex flex-col gap-4">
         {reporte.observaciones.map((observacion) => (
           <Card key={observacion.id}>

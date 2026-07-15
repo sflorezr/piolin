@@ -87,6 +87,15 @@ export default async function NinoDetallePage({
               <Badge variant={reporte.enviadoEmail ? "success" : "neutral"}>
                 {reporte.enviadoEmail ? "Enviado" : "Sin enviar"}
               </Badge>
+              <a
+                href={`/mis-grupos/ninos/${nino.id}/reportes/${reporte.id}/pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="sm">
+                  PDF
+                </Button>
+              </a>
               {destinatarios.length > 0 && (
                 <form action={enviarReporteSemanalPorCorreo.bind(null, reporte.id)}>
                   <Button variant="outline" size="sm" type="submit">

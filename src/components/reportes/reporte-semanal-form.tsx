@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,24 +11,19 @@ type Actividad = { id: string; nombre: string };
 export function ReporteSemanalForm({
   action,
   actividades,
+  rangoSemana,
 }: {
   action: (formData: FormData) => void;
   actividades: Actividad[];
+  rangoSemana: string;
 }) {
   const [filas, setFilas] = useState([{ actividadId: actividades[0]?.id ?? "", observacion: "" }]);
 
   return (
     <form action={action} className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="fechaInicio">Desde</Label>
-          <Input id="fechaInicio" name="fechaInicio" type="date" required />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="fechaFin">Hasta</Label>
-          <Input id="fechaFin" name="fechaFin" type="date" required />
-        </div>
-      </div>
+      <p className="text-sm text-neutral-600">
+        Semana: <span className="font-medium text-neutral-900">{rangoSemana}</span>
+      </p>
 
       <div className="flex flex-col gap-3">
         <Label>Actividades de la semana</Label>

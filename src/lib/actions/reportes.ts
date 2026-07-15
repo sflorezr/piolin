@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanal } from "@/lib/email";
-import { formatearFecha } from "@/lib/utils";
+import { formatearFecha, obtenerSemanaActual } from "@/lib/utils";
 
 async function verificarAccesoAlNino(ninoId: string, profesoraId: string) {
   const nino = await prisma.nino.findFirst({
@@ -28,11 +28,14 @@ export async function crearReporteSemanal(ninoId: string, formData: FormData) {
   const profesora = await obtenerProfesoraActual();
   await verificarAccesoAlNino(ninoId, profesora.id);
 
-  const fechaInicio = String(formData.get("fechaInicio") ?? "");
-  const fechaFin = String(formData.get("fechaFin") ?? "");
+  const { inicio, fin } = obtenerSemanaActual();
 
-  if (!fechaInicio || !fechaFin) {
-    throw new Error("Debes indicar la fecha de inicio y fin de la semana.");
+  const existente = await prisma.reporteSemanal.findUnique({
+    where: { ninoId_fechaInicio: { ninoId, fechaInicio: inicio } },
+  });
+
+  if (existente) {
+    redirect(`/mis-grupos/ninos/${ninoId}/reportes/${existente.id}`);
   }
 
   const actividadIds = formData.getAll("actividadId").map(String);
@@ -53,8 +56,8 @@ export async function crearReporteSemanal(ninoId: string, formData: FormData) {
     data: {
       ninoId,
       profesoraId: profesora.id,
-      fechaInicio: new Date(fechaInicio),
-      fechaFin: new Date(fechaFin),
+      fechaInicio: inicio,
+      fechaFin: fin,
       observaciones: { create: entradas },
     },
   });
@@ -108,4 +111,5 @@ export async function enviarReporteSemanalPorCorreo(reporteId: string) {
   });
 
   revalidatePath(`/mis-grupos/ninos/${reporte.ninoId}/reportes/${reporteId}`);
+  revalidatePath(`/mis-grupos/ninos/${reporte.ninoId}`);
 }

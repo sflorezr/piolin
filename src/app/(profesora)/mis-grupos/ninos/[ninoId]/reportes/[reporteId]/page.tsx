@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
@@ -69,7 +70,18 @@ export default async function ReporteSemanalPage({
             <CardHeader>
               <CardTitle className="text-base">{observacion.actividad.nombre}</CardTitle>
             </CardHeader>
-            <CardContent className="text-neutral-700">{observacion.observacion}</CardContent>
+            <CardContent className="flex flex-col gap-3 text-neutral-700">
+              {observacion.observacion}
+              {observacion.fotoUrl && (
+                <Image
+                  src={observacion.fotoUrl}
+                  alt={observacion.actividad.nombre}
+                  width={320}
+                  height={240}
+                  className="max-h-60 w-auto rounded-md object-cover"
+                />
+              )}
+            </CardContent>
           </Card>
         ))}
       </div>

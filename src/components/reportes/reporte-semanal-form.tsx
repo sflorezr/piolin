@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,6 +69,12 @@ export function ReporteSemanalForm({
               }}
               required
             />
+            <div className="flex flex-col gap-1">
+              <Label htmlFor={`foto-${indice}`} className="text-xs text-neutral-500">
+                Foto de la actividad (opcional)
+              </Label>
+              <Input id={`foto-${indice}`} name="foto" type="file" accept="image/*" />
+            </div>
           </div>
         ))}
         <Button

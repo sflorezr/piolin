@@ -7,6 +7,7 @@ import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanal } from "@/lib/email";
 import { formatearFecha, obtenerSemanaActual } from "@/lib/utils";
 import { construirPropsReportePdf, generarBufferReporteSemanal } from "@/lib/pdf/reporte-semanal-pdf";
+import { subirFoto } from "@/lib/upload";
 
 async function verificarAccesoAlNino(ninoId: string, profesoraId: string) {
   const nino = await prisma.nino.findFirst({
@@ -41,13 +42,21 @@ export async function crearReporteSemanal(ninoId: string, formData: FormData) {
 
   const actividadIds = formData.getAll("actividadId").map(String);
   const observaciones = formData.getAll("observacion").map(String);
+  const fotos = formData.getAll("foto") as File[];
 
-  const entradas = actividadIds
-    .map((actividadId, indice) => ({
-      actividadId,
-      observacion: (observaciones[indice] ?? "").trim(),
-    }))
-    .filter((entrada) => entrada.actividadId && entrada.observacion);
+  const entradas: { actividadId: string; observacion: string; fotoUrl: string | null }[] = [];
+
+  for (let indice = 0; indice < actividadIds.length; indice++) {
+    const actividadId = actividadIds[indice];
+    const observacion = (observaciones[indice] ?? "").trim();
+
+    if (!actividadId || !observacion) continue;
+
+    const foto = fotos[indice];
+    const fotoUrl = foto && foto.size > 0 ? await subirFoto(foto, "reportes") : null;
+
+    entradas.push({ actividadId, observacion, fotoUrl });
+  }
 
   if (entradas.length === 0) {
     throw new Error("Agrega al menos una actividad con su observación.");

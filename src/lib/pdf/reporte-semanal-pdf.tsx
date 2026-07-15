@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   },
   actividad: { fontSize: 12, fontWeight: 700, marginBottom: 4 },
   observacion: { fontSize: 11, color: "#404040", lineHeight: 1.4 },
+  fotoActividad: { width: 220, height: 165, objectFit: "cover", borderRadius: 4, marginTop: 8 },
   footer: { marginTop: 20, fontSize: 9, color: "#a3a3a3" },
 });
 
@@ -25,7 +26,7 @@ type ReporteParaPdf = {
   fotoUrl: string | null;
   rangoSemana: string;
   profesoraNombre: string;
-  observaciones: { actividadNombre: string; observacion: string }[];
+  observaciones: { actividadNombre: string; observacion: string; fotoUrl: string | null }[];
 };
 
 export function ReporteSemanalPdf({
@@ -51,9 +52,11 @@ export function ReporteSemanalPdf({
         </View>
 
         {observaciones.map((obs, indice) => (
-          <View key={indice} style={styles.seccion}>
+          <View key={indice} style={styles.seccion} wrap={false}>
             <Text style={styles.actividad}>{obs.actividadNombre}</Text>
             <Text style={styles.observacion}>{obs.observacion}</Text>
+            {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image, not an <img> */}
+            {obs.fotoUrl && <Image src={obs.fotoUrl} style={styles.fotoActividad} />}
           </View>
         ))}
 
@@ -72,7 +75,7 @@ type ReporteConRelaciones = {
   fechaFin: Date;
   profesora: { nombre: string };
   nino: { nombre: string; fotoUrl: string | null; grupo: { descripcion: string } };
-  observaciones: { actividad: { nombre: string }; observacion: string }[];
+  observaciones: { actividad: { nombre: string }; observacion: string; fotoUrl: string | null }[];
 };
 
 export function construirPropsReportePdf(reporte: ReporteConRelaciones): ReporteParaPdf {
@@ -85,6 +88,7 @@ export function construirPropsReportePdf(reporte: ReporteConRelaciones): Reporte
     observaciones: reporte.observaciones.map((observacion) => ({
       actividadNombre: observacion.actividad.nombre,
       observacion: observacion.observacion,
+      fotoUrl: observacion.fotoUrl,
     })),
   };
 }

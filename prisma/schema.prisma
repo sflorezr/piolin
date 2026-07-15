@@ -138,6 +138,7 @@ model ObservacionActividad {
   actividad   Actividad @relation(fields: [actividadId], references: [id])
 
   observacion String
+  fotoUrl     String?
 
   createdAt DateTime @default(now())
 }

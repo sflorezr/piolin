@@ -26,6 +26,15 @@ export function ReporteSemanalForm({
         Semana: <span className="font-medium text-neutral-900">{rangoSemana}</span>
       </p>
 
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="comentarioGeneral">Comentario general de la semana (opcional)</Label>
+        <Textarea
+          id="comentarioGeneral"
+          name="comentarioGeneral"
+          placeholder="Comentario general de la profesora sobre la semana"
+        />
+      </div>
+
       <div className="flex flex-col gap-3">
         <Label>Actividades de la semana</Label>
         {filas.map((fila, indice) => (

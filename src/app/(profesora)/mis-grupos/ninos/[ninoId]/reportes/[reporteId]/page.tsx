@@ -64,6 +64,15 @@ export default async function ReporteSemanalPage({
         </Button>
       </a>
 
+      {reporte.comentarioGeneral && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-base">Comentario general de la semana</CardTitle>
+          </CardHeader>
+          <CardContent className="text-neutral-700">{reporte.comentarioGeneral}</CardContent>
+        </Card>
+      )}
+
       <div className="mt-6 flex flex-col gap-4">
         {reporte.observaciones.map((observacion) => (
           <Card key={observacion.id}>

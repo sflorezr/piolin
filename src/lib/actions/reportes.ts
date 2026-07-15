@@ -62,12 +62,15 @@ export async function crearReporteSemanal(ninoId: string, formData: FormData) {
     throw new Error("Agrega al menos una actividad con su observación.");
   }
 
+  const comentarioGeneral = String(formData.get("comentarioGeneral") ?? "").trim() || null;
+
   const reporte = await prisma.reporteSemanal.create({
     data: {
       ninoId,
       profesoraId: profesora.id,
       fechaInicio: inicio,
       fechaFin: fin,
+      comentarioGeneral,
       observaciones: { create: entradas },
     },
   });

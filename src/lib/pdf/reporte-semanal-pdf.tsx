@@ -19,6 +19,14 @@ const styles = StyleSheet.create({
   actividad: { fontSize: 12, fontWeight: 700, marginBottom: 4 },
   observacion: { fontSize: 11, color: "#404040", lineHeight: 1.4 },
   fotoActividad: { width: 220, height: 165, objectFit: "cover", borderRadius: 4, marginTop: 8 },
+  comentarioGeneral: {
+    marginBottom: 16,
+    padding: 10,
+    backgroundColor: "#fafafa",
+    borderRadius: 4,
+  },
+  comentarioGeneralTitulo: { fontSize: 11, fontWeight: 700, marginBottom: 4 },
+  comentarioGeneralTexto: { fontSize: 11, color: "#404040", lineHeight: 1.4 },
   footer: { marginTop: 20, fontSize: 9, color: "#a3a3a3" },
 });
 
@@ -29,6 +37,7 @@ type ReporteParaPdf = {
   rangoSemana: string;
   profesoraNombre: string;
   profesoraFotoUrl: string | null;
+  comentarioGeneral: string | null;
   observaciones: { actividadNombre: string; observacion: string; fotoUrl: string | null }[];
 };
 
@@ -39,6 +48,7 @@ export function ReporteSemanalPdf({
   rangoSemana,
   profesoraNombre,
   profesoraFotoUrl,
+  comentarioGeneral,
   observaciones,
 }: ReporteParaPdf) {
   return (
@@ -58,6 +68,13 @@ export function ReporteSemanalPdf({
             </View>
           </View>
         </View>
+
+        {comentarioGeneral && (
+          <View style={styles.comentarioGeneral} wrap={false}>
+            <Text style={styles.comentarioGeneralTitulo}>Comentario general de la semana</Text>
+            <Text style={styles.comentarioGeneralTexto}>{comentarioGeneral}</Text>
+          </View>
+        )}
 
         {observaciones.map((obs, indice) => (
           <View key={indice} style={styles.seccion} wrap={false}>
@@ -81,6 +98,7 @@ export async function generarBufferReporteSemanal(props: ReporteParaPdf): Promis
 type ReporteConRelaciones = {
   fechaInicio: Date;
   fechaFin: Date;
+  comentarioGeneral: string | null;
   profesora: { nombre: string; fotoUrl: string | null };
   nino: { nombre: string; fotoUrl: string | null; grupo: { descripcion: string } };
   observaciones: { actividad: { nombre: string }; observacion: string; fotoUrl: string | null }[];
@@ -94,6 +112,7 @@ export function construirPropsReportePdf(reporte: ReporteConRelaciones): Reporte
     rangoSemana: `${formatearFecha(reporte.fechaInicio)} — ${formatearFecha(reporte.fechaFin)}`,
     profesoraNombre: reporte.profesora.nombre,
     profesoraFotoUrl: reporte.profesora.fotoUrl,
+    comentarioGeneral: reporte.comentarioGeneral,
     observaciones: reporte.observaciones.map((observacion) => ({
       actividadNombre: observacion.actividad.nombre,
       observacion: observacion.observacion,

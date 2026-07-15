@@ -135,3 +135,30 @@ export async function enviarReporteSemanalPorCorreo(reporteId: string) {
   revalidatePath(`/mis-grupos/ninos/${reporte.ninoId}/reportes/${reporteId}`);
   revalidatePath(`/mis-grupos/ninos/${reporte.ninoId}`);
 }
+
+export async function eliminarReporteSemanal(reporteId: string) {
+  const profesora = await obtenerProfesoraActual();
+
+  const reporte = await prisma.reporteSemanal.findFirst({
+    where: {
+      id: reporteId,
+      nino: {
+        grupo: {
+          OR: [{ profesoraPrincipalId: profesora.id }, { profesoraAuxiliarId: profesora.id }],
+        },
+      },
+    },
+  });
+
+  if (!reporte) {
+    throw new Error("Reporte no encontrado.");
+  }
+
+  await prisma.$transaction([
+    prisma.observacionActividad.deleteMany({ where: { reporteId } }),
+    prisma.reporteSemanal.delete({ where: { id: reporteId } }),
+  ]);
+
+  revalidatePath(`/mis-grupos/ninos/${reporte.ninoId}`);
+  redirect(`/mis-grupos/ninos/${reporte.ninoId}`);
+}

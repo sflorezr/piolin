@@ -2,10 +2,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
-import { enviarReporteSemanalPorCorreo } from "@/lib/actions/reportes";
+import { enviarReporteSemanalPorCorreo, eliminarReporteSemanal } from "@/lib/actions/reportes";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EliminarReporteButton } from "@/components/reportes/eliminar-reporte-button";
 import { formatearFecha } from "@/lib/utils";
 
 export default async function ReporteSemanalPage({
@@ -38,6 +39,7 @@ export default async function ReporteSemanalPage({
     (correo): correo is string => Boolean(correo)
   );
   const enviar = enviarReporteSemanalPorCorreo.bind(null, reporte.id);
+  const eliminar = eliminarReporteSemanal.bind(null, reporte.id);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -45,9 +47,12 @@ export default async function ReporteSemanalPage({
         <h1 className="text-2xl font-semibold text-neutral-900">
           Reporte semanal — {reporte.nino.nombre}
         </h1>
-        <Badge variant={reporte.enviadoEmail ? "success" : "neutral"}>
-          {reporte.enviadoEmail ? "Enviado" : "Sin enviar"}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant={reporte.enviadoEmail ? "success" : "neutral"}>
+            {reporte.enviadoEmail ? "Enviado" : "Sin enviar"}
+          </Badge>
+          <EliminarReporteButton action={eliminar} />
+        </div>
       </div>
       <p className="mt-1 text-sm text-neutral-500">
         {formatearFecha(reporte.fechaInicio)} — {formatearFecha(reporte.fechaFin)}

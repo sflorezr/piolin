@@ -22,13 +22,22 @@ export async function enviarReporteSemanal(params: {
   destinatarios: string[];
   ninoNombre: string;
   htmlReporte: string;
+  adjuntoPdf: Buffer;
+  nombreAdjunto: string;
 }) {
-  const { destinatarios, ninoNombre, htmlReporte } = params;
+  const { destinatarios, ninoNombre, htmlReporte, adjuntoPdf, nombreAdjunto } = params;
 
   return getTransporter().sendMail({
     from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
     to: destinatarios.join(", "),
     subject: `Reporte semanal - ${ninoNombre}`,
     html: htmlReporte,
+    attachments: [
+      {
+        filename: nombreAdjunto,
+        content: adjuntoPdf,
+        contentType: "application/pdf",
+      },
+    ],
   });
 }

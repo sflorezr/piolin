@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanal } from "@/lib/email";
 import { formatearFecha, obtenerSemanaActual } from "@/lib/utils";
+import { construirPropsReportePdf, generarBufferReporteSemanal } from "@/lib/pdf/reporte-semanal-pdf";
 
 async function verificarAccesoAlNino(ninoId: string, profesoraId: string) {
   const nino = await prisma.nino.findFirst({
@@ -78,7 +79,11 @@ export async function enviarReporteSemanalPorCorreo(reporteId: string) {
         },
       },
     },
-    include: { nino: true, observaciones: { include: { actividad: true } } },
+    include: {
+      nino: { include: { grupo: true } },
+      profesora: true,
+      observaciones: { include: { actividad: true } },
+    },
   });
 
   if (!reporte) {
@@ -96,14 +101,19 @@ export async function enviarReporteSemanalPorCorreo(reporteId: string) {
   const htmlReporte = `
     <h2>Reporte semanal de ${reporte.nino.nombre}</h2>
     <p>${formatearFecha(reporte.fechaInicio)} — ${formatearFecha(reporte.fechaFin)}</p>
-    <ul>
-      ${reporte.observaciones
-        .map((o) => `<li><strong>${o.actividad.nombre}:</strong> ${o.observacion}</li>`)
-        .join("")}
-    </ul>
+    <p>Encontrarás el detalle completo en el PDF adjunto.</p>
   `;
 
-  await enviarReporteSemanal({ destinatarios, ninoNombre: reporte.nino.nombre, htmlReporte });
+  const adjuntoPdf = await generarBufferReporteSemanal(construirPropsReportePdf(reporte));
+  const nombreAdjunto = `reporte-${reporte.nino.nombre.toLowerCase().replace(/\s+/g, "-")}.pdf`;
+
+  await enviarReporteSemanal({
+    destinatarios,
+    ninoNombre: reporte.nino.nombre,
+    htmlReporte,
+    adjuntoPdf,
+    nombreAdjunto,
+  });
 
   await prisma.reporteSemanal.update({
     where: { id: reporteId },

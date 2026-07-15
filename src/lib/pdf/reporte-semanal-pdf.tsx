@@ -1,4 +1,5 @@
-import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
+import { formatearFecha } from "@/lib/utils";
 
 const styles = StyleSheet.create({
   page: { padding: 32, fontSize: 11, fontFamily: "Helvetica" },
@@ -60,4 +61,30 @@ export function ReporteSemanalPdf({
       </Page>
     </Document>
   );
+}
+
+export async function generarBufferReporteSemanal(props: ReporteParaPdf): Promise<Buffer> {
+  return renderToBuffer(<ReporteSemanalPdf {...props} />);
+}
+
+type ReporteConRelaciones = {
+  fechaInicio: Date;
+  fechaFin: Date;
+  profesora: { nombre: string };
+  nino: { nombre: string; fotoUrl: string | null; grupo: { descripcion: string } };
+  observaciones: { actividad: { nombre: string }; observacion: string }[];
+};
+
+export function construirPropsReportePdf(reporte: ReporteConRelaciones): ReporteParaPdf {
+  return {
+    ninoNombre: reporte.nino.nombre,
+    grupoDescripcion: reporte.nino.grupo.descripcion,
+    fotoUrl: reporte.nino.fotoUrl,
+    rangoSemana: `${formatearFecha(reporte.fechaInicio)} — ${formatearFecha(reporte.fechaFin)}`,
+    profesoraNombre: reporte.profesora.nombre,
+    observaciones: reporte.observaciones.map((observacion) => ({
+      actividadNombre: observacion.actividad.nombre,
+      observacion: observacion.observacion,
+    })),
+  };
 }

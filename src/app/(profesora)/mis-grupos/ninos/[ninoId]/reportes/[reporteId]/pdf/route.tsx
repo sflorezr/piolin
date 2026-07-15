@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { renderToBuffer } from "@react-pdf/renderer";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
-import { ReporteSemanalPdf } from "@/lib/pdf/reporte-semanal-pdf";
-import { formatearFecha } from "@/lib/utils";
+import { construirPropsReportePdf, generarBufferReporteSemanal } from "@/lib/pdf/reporte-semanal-pdf";
 
 export async function GET(
   _request: Request,
@@ -33,22 +31,7 @@ export async function GET(
     return new NextResponse("Reporte no encontrado.", { status: 404 });
   }
 
-  const rangoSemana = `${formatearFecha(reporte.fechaInicio)} — ${formatearFecha(reporte.fechaFin)}`;
-
-  const buffer = await renderToBuffer(
-    <ReporteSemanalPdf
-      ninoNombre={reporte.nino.nombre}
-      grupoDescripcion={reporte.nino.grupo.descripcion}
-      fotoUrl={reporte.nino.fotoUrl}
-      rangoSemana={rangoSemana}
-      profesoraNombre={reporte.profesora.nombre}
-      observaciones={reporte.observaciones.map((observacion) => ({
-        actividadNombre: observacion.actividad.nombre,
-        observacion: observacion.observacion,
-      }))}
-    />
-  );
-
+  const buffer = await generarBufferReporteSemanal(construirPropsReportePdf(reporte));
   const nombreArchivo = `reporte-${reporte.nino.nombre.toLowerCase().replace(/\s+/g, "-")}.pdf`;
 
   return new NextResponse(new Uint8Array(buffer), {

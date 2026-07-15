@@ -13,7 +13,7 @@ export default async function EditarProfesoraPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const profesora = await prisma.profesora.findUnique({ where: { id } });
+  const profesora = await prisma.profesora.findUnique({ where: { id }, include: { usuario: true } });
 
   if (!profesora) notFound();
 
@@ -54,6 +54,20 @@ export default async function EditarProfesoraPage({
               <Label htmlFor="foto">Reemplazar foto</Label>
               <Input id="foto" name="foto" type="file" accept="image/*" />
             </div>
+
+            <hr className="my-2 border-neutral-200" />
+            <p className="text-sm text-neutral-600">
+              Acceso al sistema. Deja la contraseña en blanco para no cambiarla.
+            </p>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">Correo</Label>
+              <Input id="email" name="email" type="email" defaultValue={profesora.usuario?.email ?? ""} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Nueva contraseña</Label>
+              <Input id="password" name="password" type="password" minLength={6} placeholder="••••••••" />
+            </div>
+
             <Button type="submit" className="mt-2">
               Guardar cambios
             </Button>

@@ -20,11 +20,6 @@ enum Estado {
   INACTIVO
 }
 
-enum TipoPregunta {
-  OPCION_MULTIPLE
-  ABIERTA
-}
-
 model Usuario {
   id        String    @id @default(cuid())
   email     String    @unique
@@ -47,9 +42,9 @@ model Profesora {
   usuarioId String? @unique
   usuario   Usuario? @relation(fields: [usuarioId], references: [id])
 
-  gruposComoPrincipal Grupo[]          @relation("ProfesoraPrincipal")
-  gruposComoAuxiliar  Grupo[]          @relation("ProfesoraAuxiliar")
-  reportesEntrega     ReporteEntrega[]
+  gruposComoPrincipal Grupo[]           @relation("ProfesoraPrincipal")
+  gruposComoAuxiliar  Grupo[]           @relation("ProfesoraAuxiliar")
+  reportesSemanales   ReporteSemanal[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,27 +87,25 @@ model Nino {
   grupoId String
   grupo   Grupo  @relation(fields: [grupoId], references: [id])
 
-  reportesEntrega ReporteEntrega[]
+  reportesSemanales ReporteSemanal[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Pregunta {
-  id      String       @id @default(cuid())
-  texto   String
-  tipo    TipoPregunta
-  opciones String[]    @default([]) // solo aplica cuando tipo = OPCION_MULTIPLE
-  orden   Int          @default(0)
-  estado  Estado       @default(ACTIVO)
+model Actividad {
+  id     String @id @default(cuid())
+  nombre String
+  orden  Int    @default(0)
+  estado Estado @default(ACTIVO)
 
-  respuestas RespuestaReporte[]
+  observaciones ObservacionActividad[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model ReporteEntrega {
+model ReporteSemanal {
   id String @id @default(cuid())
 
   ninoId String
@@ -121,23 +114,28 @@ model ReporteEntrega {
   profesoraId String
   profesora   Profesora @relation(fields: [profesoraId], references: [id])
 
-  fechaHora    DateTime @default(now())
-  enviadoEmail Boolean  @default(false)
+  fechaInicio DateTime
+  fechaFin    DateTime
+
+  enviadoEmail Boolean @default(false)
   enviadoA     String?
 
-  respuestas RespuestaReporte[]
+  observaciones ObservacionActividad[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model RespuestaReporte {
+model ObservacionActividad {
   id String @id @default(cuid())
 
   reporteId String
-  reporte   ReporteEntrega @relation(fields: [reporteId], references: [id])
+  reporte   ReporteSemanal @relation(fields: [reporteId], references: [id])
 
-  preguntaId String
-  pregunta   Pregunta @relation(fields: [preguntaId], references: [id])
+  actividadId String
+  actividad   Actividad @relation(fields: [actividadId], references: [id])
 
-  respuesta String
+  observacion String
+
+  createdAt DateTime @default(now())
 }

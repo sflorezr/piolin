@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { signOut } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 const NAV_ITEMS = [
   { href: "/admin", label: "Inicio" },
   { href: "/admin/profesoras", label: "Profesoras" },

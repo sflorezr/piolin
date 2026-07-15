@@ -1,8 +1,22 @@
-import { createClient } from "@supabase/supabase-js";
-
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? ""
-);
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 export const BUCKET_FOTOS = "fotos";
+
+let cliente: SupabaseClient | null = null;
+
+export function getSupabase(): SupabaseClient {
+  if (!cliente) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!url || !key) {
+      throw new Error(
+        "Faltan NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY en las variables de entorno."
+      );
+    }
+
+    cliente = createClient(url, key);
+  }
+
+  return cliente;
+}

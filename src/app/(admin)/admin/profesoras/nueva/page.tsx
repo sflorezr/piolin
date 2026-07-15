@@ -1,0 +1,42 @@
+import { crearProfesora } from "@/lib/actions/profesoras";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function NuevaProfesoraPage() {
+  return (
+    <div className="mx-auto max-w-lg">
+      <h1 className="text-2xl font-semibold text-neutral-900">Nueva profesora</h1>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Datos de la profesora</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form action={crearProfesora} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="nombre">Nombre</Label>
+              <Input id="nombre" name="nombre" required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="documento">Documento</Label>
+              <Input id="documento" name="documento" required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="telefono">Teléfono</Label>
+              <Input id="telefono" name="telefono" required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="foto">Foto</Label>
+              <Input id="foto" name="foto" type="file" accept="image/*" />
+            </div>
+            <Button type="submit" className="mt-2">
+              Guardar
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

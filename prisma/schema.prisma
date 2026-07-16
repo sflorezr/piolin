@@ -20,6 +20,11 @@ enum Estado {
   INACTIVO
 }
 
+enum AlcanceActividad {
+  SEMANAL
+  DIARIA
+}
+
 model Usuario {
   id        String    @id @default(cuid())
   email     String    @unique
@@ -45,6 +50,7 @@ model Profesora {
   gruposComoPrincipal Grupo[]           @relation("ProfesoraPrincipal")
   gruposComoAuxiliar  Grupo[]           @relation("ProfesoraAuxiliar")
   reportesSemanales   ReporteSemanal[]
+  reportesEspeciales  ReporteEspecial[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,19 +93,22 @@ model Nino {
   grupoId String
   grupo   Grupo  @relation(fields: [grupoId], references: [id])
 
-  reportesSemanales ReporteSemanal[]
+  reportesSemanales  ReporteSemanal[]
+  reportesEspeciales ReporteEspecial[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Actividad {
-  id     String @id @default(cuid())
-  nombre String
-  orden  Int    @default(0)
-  estado Estado @default(ACTIVO)
+  id      String           @id @default(cuid())
+  nombre  String
+  alcance AlcanceActividad @default(SEMANAL)
+  orden   Int              @default(0)
+  estado  Estado           @default(ACTIVO)
 
-  observaciones ObservacionActividad[]
+  observaciones      ObservacionActividad[]
+  reportesEspeciales ReporteEspecial[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -141,6 +150,41 @@ model ObservacionActividad {
 
   observacion String
   fotoUrl     String?
+
+  createdAt DateTime @default(now())
+}
+
+model ReporteEspecial {
+  id String @id @default(cuid())
+
+  ninoId String
+  nino   Nino   @relation(fields: [ninoId], references: [id])
+
+  profesoraId String
+  profesora   Profesora @relation(fields: [profesoraId], references: [id])
+
+  actividadId String
+  actividad   Actividad @relation(fields: [actividadId], references: [id])
+
+  fecha      DateTime
+  comentario String?
+
+  enviadoEmail Boolean @default(false)
+  enviadoA     String?
+
+  fotos FotoReporteEspecial[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FotoReporteEspecial {
+  id String @id @default(cuid())
+
+  reporteId String
+  reporte   ReporteEspecial @relation(fields: [reporteId], references: [id])
+
+  fotoUrl String
 
   createdAt DateTime @default(now())
 }

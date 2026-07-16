@@ -53,7 +53,7 @@ export default async function NuevoReporteSemanalPage({
   }
 
   const actividades = await prisma.actividad.findMany({
-    where: { estado: "ACTIVO" },
+    where: { estado: "ACTIVO", alcance: "SEMANAL" },
     orderBy: { orden: "asc" },
   });
 

@@ -6,12 +6,17 @@ import { prisma } from "@/lib/prisma";
 
 function leerDatosFormulario(formData: FormData) {
   const nombre = String(formData.get("nombre") ?? "").trim();
+  const alcance = String(formData.get("alcance") ?? "SEMANAL");
 
   if (!nombre) {
     throw new Error("El nombre de la actividad es obligatorio.");
   }
 
-  return { nombre };
+  if (alcance !== "SEMANAL" && alcance !== "DIARIA") {
+    throw new Error("El alcance de la actividad no es válido.");
+  }
+
+  return { nombre, alcance: alcance as "SEMANAL" | "DIARIA" };
 }
 
 export async function crearActividad(formData: FormData) {

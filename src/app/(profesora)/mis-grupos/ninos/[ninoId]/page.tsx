@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanalPorCorreo } from "@/lib/actions/reportes";
+import { enviarReporteEspecialPorCorreo } from "@/lib/actions/reportes-especiales";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,12 @@ export default async function NinoDetallePage({
   const reportes = await prisma.reporteSemanal.findMany({
     where: { ninoId: nino.id },
     orderBy: { fechaInicio: "desc" },
+  });
+
+  const reportesEspeciales = await prisma.reporteEspecial.findMany({
+    where: { ninoId: nino.id },
+    orderBy: { fecha: "desc" },
+    include: { actividad: true },
   });
 
   const { inicio: inicioSemanaActual } = obtenerSemanaActual();
@@ -110,6 +117,42 @@ export default async function NinoDetallePage({
         ))}
         {reportes.length === 0 && (
           <p className="text-neutral-500">Todavía no hay reportes semanales.</p>
+        )}
+      </div>
+
+      <div className="mt-8 flex items-center justify-between">
+        <h2 className="text-lg font-medium text-neutral-900">Reportes especiales</h2>
+        <Link href={`/mis-grupos/ninos/${nino.id}/reportes-especiales/nuevo`}>
+          <Button>Nuevo reporte especial</Button>
+        </Link>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-3">
+        {reportesEspeciales.map((reporte) => (
+          <Card key={reporte.id} className="flex items-center justify-between gap-4 p-4">
+            <Link
+              href={`/mis-grupos/ninos/${nino.id}/reportes-especiales/${reporte.id}`}
+              className="flex-1 hover:underline"
+            >
+              <p className="font-medium text-neutral-900">{reporte.actividad.nombre}</p>
+              <p className="text-sm text-neutral-500">{formatearFecha(reporte.fecha)}</p>
+            </Link>
+            <div className="flex items-center gap-3">
+              <Badge variant={reporte.enviadoEmail ? "success" : "neutral"}>
+                {reporte.enviadoEmail ? "Enviado" : "Sin enviar"}
+              </Badge>
+              {destinatarios.length > 0 && (
+                <form action={enviarReporteEspecialPorCorreo.bind(null, reporte.id)}>
+                  <Button variant="outline" size="sm" type="submit">
+                    {reporte.enviadoEmail ? "Reenviar" : "Enviar por correo"}
+                  </Button>
+                </form>
+              )}
+            </div>
+          </Card>
+        ))}
+        {reportesEspeciales.length === 0 && (
+          <p className="text-neutral-500">Todavía no hay reportes especiales.</p>
         )}
       </div>
     </div>

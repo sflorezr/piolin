@@ -11,13 +11,14 @@ export default async function ActividadesPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-neutral-900">Actividades semanales</h1>
+        <h1 className="text-2xl font-semibold text-neutral-900">Actividades</h1>
         <Link href="/admin/actividades/nueva">
           <Button>Nueva actividad</Button>
         </Link>
       </div>
       <p className="mt-2 text-sm text-neutral-600">
-        Catálogo de actividades disponible para que las profesoras arme el reporte semanal de cada niño.
+        Catálogo de actividades: las semanales arman el reporte de la semana, las especiales de un día
+        se usan para el reporte puntual de una actividad especial.
       </p>
 
       <Card className="mt-6 overflow-hidden">
@@ -25,6 +26,7 @@ export default async function ActividadesPage() {
           <thead className="bg-neutral-50 text-left text-neutral-500">
             <tr>
               <th className="px-4 py-3 font-medium">Actividad</th>
+              <th className="px-4 py-3 font-medium">Alcance</th>
               <th className="px-4 py-3 font-medium">Estado</th>
               <th className="px-4 py-3 font-medium"></th>
             </tr>
@@ -33,6 +35,11 @@ export default async function ActividadesPage() {
             {actividades.map((actividad) => (
               <tr key={actividad.id}>
                 <td className="px-4 py-3 font-medium text-neutral-900">{actividad.nombre}</td>
+                <td className="px-4 py-3">
+                  <Badge variant="neutral">
+                    {actividad.alcance === "SEMANAL" ? "Semanal" : "Especial (1 día)"}
+                  </Badge>
+                </td>
                 <td className="px-4 py-3">
                   <Badge variant={actividad.estado === "ACTIVO" ? "success" : "neutral"}>
                     {actividad.estado === "ACTIVO" ? "Activo" : "Inactivo"}
@@ -62,7 +69,7 @@ export default async function ActividadesPage() {
             ))}
             {actividades.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-neutral-500">
+                <td colSpan={4} className="px-4 py-8 text-center text-neutral-500">
                   No hay actividades registradas todavía.
                 </td>
               </tr>

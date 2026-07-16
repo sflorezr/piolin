@@ -4,6 +4,7 @@ import { actualizarActividad } from "@/lib/actions/actividades";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BackLink } from "@/components/ui/back-link";
 
@@ -29,6 +30,13 @@ export default async function EditarActividadPage({ params }: { params: Promise<
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="nombre">Nombre</Label>
               <Input id="nombre" name="nombre" defaultValue={actividad.nombre} required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="alcance">Alcance</Label>
+              <Select id="alcance" name="alcance" defaultValue={actividad.alcance}>
+                <option value="SEMANAL">Semanal (para el reporte de la semana)</option>
+                <option value="DIARIA">Especial de un día (reporte por actividad puntual)</option>
+              </Select>
             </div>
             <Button type="submit" className="mt-2">
               Guardar cambios

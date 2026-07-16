@@ -6,6 +6,7 @@ import { crearReporteSemanal } from "@/lib/actions/reportes";
 import { ReporteSemanalForm } from "@/components/reportes/reporte-semanal-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BackLink } from "@/components/ui/back-link";
 import { formatearFecha, obtenerSemanaActual } from "@/lib/utils";
 
 export default async function NuevoReporteSemanalPage({
@@ -37,6 +38,7 @@ export default async function NuevoReporteSemanalPage({
   if (existente) {
     return (
       <div className="mx-auto max-w-lg">
+        <BackLink href={`/mis-grupos/ninos/${nino.id}`} className="mb-4" />
         <h1 className="text-2xl font-semibold text-neutral-900">
           Reporte semanal — {nino.nombre}
         </h1>
@@ -59,6 +61,7 @@ export default async function NuevoReporteSemanalPage({
 
   return (
     <div className="mx-auto max-w-lg">
+      <BackLink href={`/mis-grupos/ninos/${nino.id}`} className="mb-4" />
       <h1 className="text-2xl font-semibold text-neutral-900">
         Reporte de esta semana — {nino.nombre}
       </h1>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EliminarReporteButton } from "@/components/reportes/eliminar-reporte-button";
+import { BackLink } from "@/components/ui/back-link";
 import { formatearFecha } from "@/lib/utils";
 
 export default async function ReporteSemanalPage({
@@ -43,6 +44,7 @@ export default async function ReporteSemanalPage({
 
   return (
     <div className="mx-auto max-w-2xl">
+      <BackLink href={`/mis-grupos/ninos/${ninoId}`} className="mb-4" />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-neutral-900">
           Reporte semanal — {reporte.nino.nombre}

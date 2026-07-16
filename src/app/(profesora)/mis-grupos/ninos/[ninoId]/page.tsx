@@ -7,6 +7,7 @@ import { enviarReporteSemanalPorCorreo } from "@/lib/actions/reportes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BackLink } from "@/components/ui/back-link";
 import { formatearFecha, obtenerSemanaActual } from "@/lib/utils";
 
 export default async function NinoDetallePage({
@@ -45,6 +46,7 @@ export default async function NinoDetallePage({
 
   return (
     <div>
+      <BackLink href={`/mis-grupos/${nino.grupoId}`} className="mb-4" />
       <div className="flex items-center gap-4">
         {nino.fotoUrl ? (
           <Image

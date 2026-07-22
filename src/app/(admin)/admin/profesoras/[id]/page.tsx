@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { actualizarProfesora } from "@/lib/actions/profesoras";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -70,9 +70,7 @@ export default async function EditarProfesoraPage({
               <Input id="password" name="password" type="password" minLength={6} placeholder="••••••••" />
             </div>
 
-            <Button type="submit" className="mt-2">
-              Guardar cambios
-            </Button>
+            <SubmitButton className="mt-2">Guardar cambios</SubmitButton>
           </form>
         </CardContent>
       </Card>

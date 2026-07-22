@@ -3,6 +3,7 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { cambiarEstadoProfesora } from "@/lib/actions/profesoras";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 
@@ -68,9 +69,9 @@ export default async function ProfesorasPage() {
                         profesora.estado === "ACTIVO" ? "INACTIVO" : "ACTIVO"
                       )}
                     >
-                      <Button variant="ghost" size="sm" type="submit">
+                      <SubmitButton variant="ghost" size="sm">
                         {profesora.estado === "ACTIVO" ? "Desactivar" : "Activar"}
-                      </Button>
+                      </SubmitButton>
                     </form>
                   </div>
                 </td>

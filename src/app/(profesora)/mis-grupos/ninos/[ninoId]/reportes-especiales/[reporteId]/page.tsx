@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteEspecialPorCorreo, eliminarReporteEspecial } from "@/lib/actions/reportes-especiales";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { EliminarReporteButton } from "@/components/reportes/eliminar-reporte-button";
 import { BackLink } from "@/components/ui/back-link";
@@ -76,9 +76,9 @@ export default async function ReporteEspecialPage({
           </p>
         ) : (
           <form action={enviar}>
-            <Button type="submit">
+            <SubmitButton pendingText="Enviando...">
               {reporte.enviadoEmail ? "Reenviar por correo" : "Enviar por correo"}
-            </Button>
+            </SubmitButton>
             <p className="mt-2 text-xs text-neutral-500">
               Se enviará a: {destinatarios.join(", ")} (fotos adjuntas)
             </p>

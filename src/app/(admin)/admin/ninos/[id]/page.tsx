@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { actualizarNino } from "@/lib/actions/ninos";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -104,9 +104,7 @@ export default async function EditarNinoPage({ params }: { params: Promise<{ id:
               </div>
             </div>
 
-            <Button type="submit" className="mt-2">
-              Guardar cambios
-            </Button>
+            <SubmitButton className="mt-2">Guardar cambios</SubmitButton>
           </form>
         </CardContent>
       </Card>

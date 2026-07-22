@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 export function EliminarReporteButton({ action }: { action: () => void }) {
   return (
@@ -12,9 +12,9 @@ export function EliminarReporteButton({ action }: { action: () => void }) {
         }
       }}
     >
-      <Button type="submit" variant="destructive" size="sm">
+      <SubmitButton variant="destructive" size="sm" pendingText="Eliminando...">
         Eliminar reporte
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

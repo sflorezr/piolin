@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { actualizarGrupo } from "@/lib/actions/grupos";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -72,9 +72,7 @@ export default async function EditarGrupoPage({ params }: { params: Promise<{ id
                 ))}
               </Select>
             </div>
-            <Button type="submit" className="mt-2">
-              Guardar cambios
-            </Button>
+            <SubmitButton className="mt-2">Guardar cambios</SubmitButton>
           </form>
         </CardContent>
       </Card>

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { crearReporteEspecial } from "@/lib/actions/reportes-especiales";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -81,9 +81,7 @@ export default async function NuevoReporteEspecialPage({
                 <Label htmlFor="comentario">Comentario (opcional)</Label>
                 <Textarea id="comentario" name="comentario" placeholder="Comentario de la profesora" />
               </div>
-              <Button type="submit" className="mt-2">
-                Guardar reporte
-              </Button>
+              <SubmitButton className="mt-2">Guardar reporte</SubmitButton>
             </form>
           )}
         </CardContent>

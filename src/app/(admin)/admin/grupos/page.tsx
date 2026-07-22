@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { cambiarEstadoGrupo } from "@/lib/actions/grupos";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 
@@ -64,9 +65,9 @@ export default async function GruposPage() {
                         grupo.estado === "ACTIVO" ? "INACTIVO" : "ACTIVO"
                       )}
                     >
-                      <Button variant="ghost" size="sm" type="submit">
+                      <SubmitButton variant="ghost" size="sm">
                         {grupo.estado === "ACTIVO" ? "Desactivar" : "Activar"}
-                      </Button>
+                      </SubmitButton>
                     </form>
                   </div>
                 </td>

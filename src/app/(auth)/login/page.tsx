@@ -1,5 +1,5 @@
 import { signIn } from "@/lib/auth";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,9 +30,9 @@ export default function LoginPage() {
               <Label htmlFor="password">Contraseña</Label>
               <Input id="password" name="password" type="password" required />
             </div>
-            <Button type="submit" className="mt-2">
+            <SubmitButton className="mt-2" pendingText="Ingresando...">
               Ingresar
-            </Button>
+            </SubmitButton>
           </form>
         </CardContent>
       </Card>

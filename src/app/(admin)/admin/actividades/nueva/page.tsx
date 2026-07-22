@@ -1,5 +1,5 @@
 import { crearActividad } from "@/lib/actions/actividades";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -29,9 +29,7 @@ export default function NuevaActividadPage() {
                 <option value="DIARIA">Especial de un día (reporte por actividad puntual)</option>
               </Select>
             </div>
-            <Button type="submit" className="mt-2">
-              Guardar
-            </Button>
+            <SubmitButton className="mt-2">Guardar</SubmitButton>
           </form>
         </CardContent>
       </Card>

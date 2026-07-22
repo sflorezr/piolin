@@ -6,6 +6,7 @@ import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanalPorCorreo } from "@/lib/actions/reportes";
 import { enviarReporteEspecialPorCorreo } from "@/lib/actions/reportes-especiales";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BackLink } from "@/components/ui/back-link";
@@ -107,9 +108,9 @@ export default async function NinoDetallePage({
               </a>
               {destinatarios.length > 0 && (
                 <form action={enviarReporteSemanalPorCorreo.bind(null, reporte.id)}>
-                  <Button variant="outline" size="sm" type="submit">
+                  <SubmitButton variant="outline" size="sm" pendingText="Enviando...">
                     {reporte.enviadoEmail ? "Reenviar" : "Enviar por correo"}
-                  </Button>
+                  </SubmitButton>
                 </form>
               )}
             </div>
@@ -143,9 +144,9 @@ export default async function NinoDetallePage({
               </Badge>
               {destinatarios.length > 0 && (
                 <form action={enviarReporteEspecialPorCorreo.bind(null, reporte.id)}>
-                  <Button variant="outline" size="sm" type="submit">
+                  <SubmitButton variant="outline" size="sm" pendingText="Enviando...">
                     {reporte.enviadoEmail ? "Reenviar" : "Enviar por correo"}
-                  </Button>
+                  </SubmitButton>
                 </form>
               )}
             </div>

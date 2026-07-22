@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { crearGrupo } from "@/lib/actions/grupos";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -52,9 +52,7 @@ export default async function NuevoGrupoPage() {
                 ))}
               </Select>
             </div>
-            <Button type="submit" className="mt-2">
-              Guardar
-            </Button>
+            <SubmitButton className="mt-2">Guardar</SubmitButton>
           </form>
         </CardContent>
       </Card>

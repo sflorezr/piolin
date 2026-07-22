@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -99,9 +100,7 @@ export function ReporteSemanalForm({
         </Button>
       </div>
 
-      <Button type="submit" className="mt-2">
-        Guardar reporte
-      </Button>
+      <SubmitButton className="mt-2">Guardar reporte</SubmitButton>
     </form>
   );
 }

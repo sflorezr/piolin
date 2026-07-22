@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { obtenerProfesoraActual } from "@/lib/profesora";
 import { enviarReporteSemanalPorCorreo, eliminarReporteSemanal } from "@/lib/actions/reportes";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EliminarReporteButton } from "@/components/reportes/eliminar-reporte-button";
@@ -109,7 +110,9 @@ export default async function ReporteSemanalPage({
           </p>
         ) : (
           <form action={enviar}>
-            <Button type="submit">{reporte.enviadoEmail ? "Reenviar por correo" : "Enviar por correo"}</Button>
+            <SubmitButton pendingText="Enviando...">
+              {reporte.enviadoEmail ? "Reenviar por correo" : "Enviar por correo"}
+            </SubmitButton>
             <p className="mt-2 text-xs text-neutral-500">Se enviará a: {destinatarios.join(", ")}</p>
           </form>
         )}
